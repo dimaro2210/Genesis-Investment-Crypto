@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { formatCurrency, mockCryptocurrencies } from "@/utils/mockData";
+import { formatCurrency, mockCryptocurrencies, mockWalletAssets } from "@/utils/mockData";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, BarChart3, Lock, Wallet } from "lucide-react";
@@ -101,20 +101,20 @@ const Index = () => {
                         <span className="font-bold text-lg">$24,853.65</span>
                       </div>
                       
-                      {mockCryptocurrencies.slice(0, 3).map((crypto) => (
-                        <div key={crypto.id} className="flex items-center justify-between p-3 bg-background/40 rounded-lg backdrop-blur-sm">
+                      {mockWalletAssets.slice(0, 3).map((asset) => (
+                        <div key={asset.id} className="flex items-center justify-between p-3 bg-background/40 rounded-lg backdrop-blur-sm">
                           <div className="flex items-center gap-3">
-                            <CoinIcon symbol={crypto.symbol} size="sm" />
+                            <CoinIcon symbol={asset.symbol} size="sm" />
                             <div>
-                              <span className="font-medium">{crypto.name}</span>
-                              <div className="text-xs text-muted-foreground">{crypto.amount} {crypto.symbol}</div>
+                              <span className="font-medium">{asset.name}</span>
+                              <div className="text-xs text-muted-foreground">{asset.amount} {asset.symbol}</div>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="font-semibold">{formatCurrency(crypto.currentPrice * crypto.amount)}</div>
-                            <div className={`text-xs ${crypto.priceChangePercentage24h >= 0 ? 'text-crypto-positive' : 'text-crypto-negative'}`}>
-                              {crypto.priceChangePercentage24h >= 0 ? '+' : ''}
-                              {crypto.priceChangePercentage24h.toFixed(2)}%
+                            <div className="font-semibold">{formatCurrency(asset.valueUSD)}</div>
+                            <div className={`text-xs ${asset.profitLossPercentage >= 0 ? 'text-crypto-positive' : 'text-crypto-negative'}`}>
+                              {asset.profitLossPercentage >= 0 ? '+' : ''}
+                              {asset.profitLossPercentage.toFixed(2)}%
                             </div>
                           </div>
                         </div>

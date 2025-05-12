@@ -67,10 +67,12 @@ const Index = () => {
               </div>
               
               <div className="relative">
-                <div className="glass-card p-8 rounded-2xl">
-                  <h3 className="text-xl font-semibold mb-4">Market Leaders</h3>
+                <div className="glass-card p-6 rounded-2xl">
+                  <div className="mb-6 p-4 rounded-xl bg-background/40 backdrop-blur-md border border-border/50 mx-2">
+                    <h3 className="text-xl font-semibold text-center">Market Leaders</h3>
+                  </div>
                   <div className="space-y-4">
-                    {mockCryptocurrencies.slice(0, 4).map((crypto) => (
+                    {mockCryptocurrencies.slice(0, 5).map((crypto) => (
                       <div key={crypto.id} className="flex items-center justify-between p-3 bg-background/40 rounded-lg backdrop-blur-sm">
                         <div className="flex items-center gap-3">
                           <CoinIcon symbol={crypto.symbol} size="sm" />

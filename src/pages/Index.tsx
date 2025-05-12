@@ -67,19 +67,28 @@ const Index = () => {
               </div>
               
               <div className="relative">
+                {/* Wallet Preview Card - Replacing Market Leaders section */}
                 <div className="glass-card p-6 rounded-2xl">
-                  <div className="mb-6 p-4 rounded-xl bg-background/40 backdrop-blur-md border border-border/50 mx-2">
-                    <h3 className="text-xl font-semibold text-center">Market Leaders</h3>
+                  <div className="mb-6 p-4 rounded-xl bg-background/40 backdrop-blur-md border border-border/50 mx-2 my-3">
+                    <h3 className="text-xl font-semibold text-center">Your Crypto Wallet</h3>
                   </div>
                   <div className="space-y-4">
-                    {mockCryptocurrencies.slice(0, 5).map((crypto) => (
+                    <div className="flex justify-between mb-4 p-3 bg-background/40 backdrop-blur-sm rounded-lg">
+                      <span className="text-muted-foreground">Total Balance</span>
+                      <span className="font-bold text-lg">$24,853.65</span>
+                    </div>
+                    
+                    {mockCryptocurrencies.slice(0, 3).map((crypto) => (
                       <div key={crypto.id} className="flex items-center justify-between p-3 bg-background/40 rounded-lg backdrop-blur-sm">
                         <div className="flex items-center gap-3">
                           <CoinIcon symbol={crypto.symbol} size="sm" />
-                          <span className="font-medium">{crypto.name}</span>
+                          <div>
+                            <span className="font-medium">{crypto.name}</span>
+                            <div className="text-xs text-muted-foreground">{crypto.amount} {crypto.symbol}</div>
+                          </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">{formatCurrency(crypto.currentPrice)}</div>
+                          <div className="font-semibold">{formatCurrency(crypto.currentPrice * crypto.amount)}</div>
                           <div className={`text-xs ${crypto.priceChangePercentage24h >= 0 ? 'text-crypto-positive' : 'text-crypto-negative'}`}>
                             {crypto.priceChangePercentage24h >= 0 ? '+' : ''}
                             {crypto.priceChangePercentage24h.toFixed(2)}%
@@ -87,9 +96,26 @@ const Index = () => {
                         </div>
                       </div>
                     ))}
+
+                    <div className="flex gap-2 mt-6">
+                      <Button variant="default" className="w-full bg-gradient-button hover:opacity-90 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                          <path d="M12 5v14"/>
+                          <path d="m19 12-7 7-7-7"/>
+                        </svg>
+                        Deposit
+                      </Button>
+                      <Button variant="outline" className="w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                          <path d="M12 19V5"/>
+                          <path d="m5 12 7-7 7 7"/>
+                        </svg>
+                        Send
+                      </Button>
+                    </div>
                   </div>
                   <div className="mt-6 text-center">
-                    <Link to="/dashboard" className="text-primary hover:underline font-medium">View all markets</Link>
+                    <Link to="/wallet" className="text-primary hover:underline font-medium">Manage your wallet</Link>
                   </div>
                 </div>
                 

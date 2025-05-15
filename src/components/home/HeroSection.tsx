@@ -1,9 +1,10 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import SplineScene from "@/components/3d/SplineScene";
+import { cn } from "@/lib/utils";
 
 interface HeroSectionProps {
   playBeepSound: () => void;
@@ -11,27 +12,118 @@ interface HeroSectionProps {
 }
 
 export const HeroSection = ({ playBeepSound, isClient }: HeroSectionProps) => {
+  const [typedText, setTypedText] = useState("");
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isInViewport, setIsInViewport] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const cryptoTexts = [
+    "The Next-Gen Crypto Trading Platform",
+    "Your Gateway to Digital Assets",
+    "Secure Blockchain Investments",
+    "Revolutionary DeFi Solutions",
+    "Future of Financial Freedom"
+  ];
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+  
+  // Typing effect
+  useEffect(() => {
+    const text = cryptoTexts[textIndex % cryptoTexts.length];
+    const typingSpeed = 80; // milliseconds per character
+    const deletingSpeed = 50; // faster when deleting
+    const pauseDuration = 1500; // pause when text is fully typed
+    
+    if (!isDeleting && typedText === text) {
+      // Pause before starting to delete
+      const timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, pauseDuration);
+      return () => clearTimeout(timer);
+    }
+    
+    const timer = setTimeout(() => {
+      if (isDeleting) {
+        setTypedText(text.substring(0, typedText.length - 1));
+        if (typedText.length === 1) {
+          setIsDeleting(false);
+          setTextIndex((prev) => prev + 1);
+        }
+      } else {
+        setTypedText(text.substring(0, typedText.length + 1));
+      }
+    }, isDeleting ? deletingSpeed : typingSpeed);
+    
+    return () => clearTimeout(timer);
+  }, [typedText, textIndex, isDeleting]);
+
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section ref={sectionRef} className="relative py-20 md:py-28 overflow-hidden">
       {/* Background video */}
       <div className="absolute inset-0 overflow-hidden">
-        <video 
-          autoPlay 
-          muted 
-          loop 
+        <iframe
+          src="https://www.youtube.com/embed/rG5Tmb2c43A?controls=0&autoplay=1&mute=1&loop=1&playlist=rG5Tmb2c43A&showinfo=0"
+          allowFullScreen
           className="absolute w-full h-full object-cover opacity-30"
-        >
-          <source src="https://player.vimeo.com/external/371848086.hd.mp4?s=224743bcc91458347979800fe4a391692c3ff6f1&profile_id=172&oauth2_token_id=57447761" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        ></iframe>
         <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-background/80 to-background"></div>
       </div>
       
+      {/* Mouse follow glowing effect */}
+      <div 
+        className="absolute bg-primary/20 rounded-full blur-3xl opacity-30 pointer-events-none transition-transform duration-300"
+        style={{
+          width: '350px',
+          height: '350px',
+          left: mousePosition.x - 175,
+          top: mousePosition.y - 175,
+          transform: `translate(-50%, -50%)`
+        }}
+      />
+      
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="flex flex-col animate-slide-up">
+          <div className={cn(
+            "flex flex-col transition-all duration-700 transform",
+            isInViewport 
+              ? "opacity-100 translate-x-0" 
+              : "opacity-0 -translate-x-12"
+          )}>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              The Next-Gen Crypto Trading Platform
+              {typedText}
+              <span className="animate-pulse">|</span>
             </h1>
             <p className="text-xl mb-8 text-muted-foreground">
               Trade cryptocurrencies with confidence using our powerful and intuitive trading platform. Advanced tools, real-time data, and secure wallet management.
@@ -59,7 +151,12 @@ export const HeroSection = ({ playBeepSound, isClient }: HeroSectionProps) => {
             </div>
           </div>
           
-          <div className="relative">
+          <div className={cn(
+            "relative transition-all duration-700 transform",
+            isInViewport 
+              ? "opacity-100 translate-x-0" 
+              : "opacity-0 translate-x-12"
+          )}>
             {/* 3D Spline Scene */}
             {isClient && <WalletPreview playBeepSound={playBeepSound} />}
             
@@ -144,7 +241,7 @@ const WalletPreview = ({ playBeepSound }: { playBeepSound: () => void }) => {
       <div className="mt-6 text-center">
         <Link 
           to="/wallet" 
-          className="text-primary hover:underline font-medium"
+          className="text-primary hover:underline font-medium hover:text-accent transition-colors duration-300"
           onClick={playBeepSound}
         >
           Manage your wallet

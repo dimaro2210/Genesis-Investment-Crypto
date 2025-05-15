@@ -1,16 +1,19 @@
 
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { BarChart3, Home, LogIn, Menu, User, Wallet } from "lucide-react";
+import { BarChart3, Bot, Home, LogIn, Menu, User, Wallet, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [chatbotOpen, setChatbotOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -26,10 +29,21 @@ export function Header() {
     // Add an event listener to check auth status when storage changes
     window.addEventListener("storage", checkAuth);
     
+    // Add scroll event listener
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    
     return () => {
       window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrolled]);
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -56,14 +70,20 @@ export function Header() {
   };
   
   return (
-    <header className="sticky top-0 z-50 bg-background/60 backdrop-blur-md border-b border-border">
-      <div className="container flex h-16 items-center justify-between">
+    <header className={cn(
+      "sticky top-0 z-50 bg-background/60 backdrop-blur-md border border-border m-2 transition-all duration-300 ease-in-out",
+      scrolled ? "rounded-lg py-2" : "rounded-3xl py-3"
+    )}>
+      <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-xl">Genesis Investment</span>
+            <span className={cn(
+              "font-bold transition-all duration-300",
+              scrolled ? "text-lg" : "text-xl"
+            )}>Genesis Investment</span>
           </Link>
         </div>
         
@@ -91,6 +111,15 @@ export function Header() {
         </nav>
         
         <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="rounded-full text-primary hover:bg-primary/10"
+            onClick={() => setChatbotOpen(true)}
+          >
+            <Bot className="h-5 w-5" />
+          </Button>
+          
           <ThemeToggle />
           
           {isAuthenticated ? (
@@ -153,7 +182,7 @@ export function Header() {
           
           {/* Mobile menu button */}
           <button onClick={toggleMobileMenu} className="md:hidden p-2 rounded-md hover:bg-secondary/80">
-            <Menu className="h-5 w-5" />
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
@@ -241,6 +270,48 @@ export function Header() {
           </div>
         </div>
       )}
+      
+      {/* AI Chatbot */}
+      <Dialog open={chatbotOpen} onOpenChange={setChatbotOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>CryptoAssist AI</DialogTitle>
+            <DialogDescription>
+              Your personal cryptocurrency assistant
+            </DialogDescription>
+          </DialogHeader>
+          <div className="chatbot-container h-80 overflow-y-auto border rounded-md p-4 my-2 bg-secondary/20">
+            <div className="bot-message mb-4">
+              <p className="bg-primary/10 rounded-lg p-3 inline-block">
+                👋 Hello! I'm CryptoAssist, your AI crypto guide. How can I help you today?
+              </p>
+            </div>
+            <div className="user-message text-right mb-4">
+              <p className="bg-accent/10 rounded-lg p-3 inline-block">
+                What's the best way to start investing in crypto?
+              </p>
+            </div>
+            <div className="bot-message mb-4">
+              <p className="bg-primary/10 rounded-lg p-3 inline-block">
+                Great question! For beginners, I recommend:<br />
+                1. Start with research to understand different cryptocurrencies<br />
+                2. Only invest what you can afford to lose<br />
+                3. Consider starting with established coins like Bitcoin or Ethereum<br />
+                4. Use a reputable exchange with good security<br />
+                5. Consider dollar-cost averaging (buying fixed amounts regularly)
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <input 
+              type="text" 
+              placeholder="Type your question..." 
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <Button>Send</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }

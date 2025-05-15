@@ -56,7 +56,7 @@ const Login = () => {
       <Header />
       
       <main className="flex-1 py-16 px-4 flex items-center justify-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md hover-3d-rotate">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
             <CardDescription>Enter your email and password to access your account</CardDescription>
@@ -108,7 +108,7 @@ const Login = () => {
                   )}
                 />
                 
-                <Button type="submit" className="w-full bg-gradient-button hover:opacity-90 transition-opacity">
+                <Button type="submit" className="w-full bg-gradient-button hover:opacity-90 transition-opacity animate-pulse-on-hover">
                   <LogIn className="mr-2 h-4 w-4" />
                   Sign In
                 </Button>
@@ -119,13 +119,16 @@ const Login = () => {
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-muted-foreground">
               Don't have an account yet?{" "}
-              <Link to="/signup" className="text-primary hover:underline">
+              <Link to="/signup" className="text-primary hover:underline hover:text-accent transition-colors duration-300 font-medium">
                 Create an account
               </Link>
             </div>
             
             <div className="flex items-center justify-center">
-              <Link to="/" className="text-sm text-primary hover:underline">
+              <Link 
+                to="/" 
+                className="text-sm text-primary hover:underline hover:text-accent transition-colors duration-300 font-medium"
+              >
                 Return to home
               </Link>
             </div>

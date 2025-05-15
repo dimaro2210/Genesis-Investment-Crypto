@@ -116,6 +116,38 @@
   .pulse-dot {
     @apply w-2 h-2 rounded-full bg-crypto-positive animate-pulse-glow;
   }
+  
+  .animate-on-scroll {
+    @apply opacity-0 transition-all duration-700;
+  }
+  
+  .animate-from-left {
+    @apply -translate-x-12;
+  }
+  
+  .animate-from-right {
+    @apply translate-x-12;
+  }
+  
+  .animate-from-bottom {
+    @apply translate-y-12;
+  }
+  
+  .animate-visible {
+    @apply opacity-100 translate-x-0 translate-y-0;
+  }
+  
+  .glow-card {
+    @apply relative overflow-hidden;
+  }
+  
+  .glow-card::before {
+    @apply content-[''] absolute -inset-0.5 bg-gradient-to-r from-primary to-accent opacity-0 rounded-xl blur transition duration-300;
+  }
+  
+  .glow-card:hover::before {
+    @apply opacity-50;
+  }
 }
 
 #root {
@@ -123,4 +155,105 @@
   margin: 0 auto;
   padding: 0;
   text-align: left;
+}
+
+/* Extended animation classes */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes crazy-button {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.button-clicked {
+  animation: crazy-button 0.5s ease-in-out;
+}
+
+/* Mouse glow effect */
+.mouse-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(111, 76, 255, 0.15) 0%,
+    rgba(111, 76, 255, 0) 70%
+  );
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  transition: transform 0.1s ease-out;
+}
+
+/* Add more interactive hover effects */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(111, 76, 255, 0.5);
+  transform: translateY(-3px);
+}
+
+/* Scrolling reveal animations */
+.reveal {
+  position: relative;
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+}
+
+.reveal-left {
+  transform: translateX(-50px);
+}
+
+.reveal-right {
+  transform: translateX(50px);
+}
+
+.reveal-left.active,
+.reveal-right.active {
+  transform: translateX(0);
+}
+
+.reveal-bottom {
+  transform: translateY(50px);
+}
+
+.reveal-bottom.active {
+  transform: translateY(0);
 }

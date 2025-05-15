@@ -124,44 +124,44 @@ export const mockCryptocurrencies: Cryptocurrency[] = [
   }
 ];
 
-// Mock wallet assets
+// Mock wallet assets with zero balances for new accounts
 export const mockWalletAssets: WalletAsset[] = [
   {
     id: 'bitcoin',
     name: 'Bitcoin',
     symbol: 'BTC',
-    amount: 0.45,
-    valueUSD: 26263.08,
-    averageBuyPrice: 52000.00,
-    profitLoss: 2863.08,
-    profitLossPercentage: 12.23,
+    amount: 0,
+    valueUSD: 0,
+    averageBuyPrice: 0,
+    profitLoss: 0,
+    profitLossPercentage: 0,
     logoUrl: '/bitcoin.png',
   },
   {
     id: 'ethereum',
     name: 'Ethereum',
     symbol: 'ETH',
-    amount: 5.2,
-    valueUSD: 16415.26,
-    averageBuyPrice: 2800.00,
-    profitLoss: 1862.70,
-    profitLossPercentage: 12.78,
+    amount: 0,
+    valueUSD: 0,
+    averageBuyPrice: 0,
+    profitLoss: 0,
+    profitLossPercentage: 0,
     logoUrl: '/ethereum.png',
   },
   {
     id: 'cardano',
     name: 'Cardano',
     symbol: 'ADA',
-    amount: 10500.0,
-    valueUSD: 5757.15,
-    averageBuyPrice: 0.52,
-    profitLoss: 297.15,
-    profitLossPercentage: 5.44,
+    amount: 0,
+    valueUSD: 0,
+    averageBuyPrice: 0,
+    profitLoss: 0,
+    profitLossPercentage: 0,
     logoUrl: '/cardano.png',
   },
 ];
 
-// Mock transactions
+// Mock transactions with current dates (2025)
 export const mockTransactions: Transaction[] = [
   {
     id: 'tx1',
@@ -170,7 +170,7 @@ export const mockTransactions: Transaction[] = [
     amount: 0.25,
     price: 56789.12,
     total: 14197.28,
-    date: '2023-05-10T14:32:10Z',
+    date: '2025-05-10T14:32:10Z',
     status: 'completed',
   },
   {
@@ -180,7 +180,7 @@ export const mockTransactions: Transaction[] = [
     amount: 1.5,
     price: 2987.65,
     total: 4481.48,
-    date: '2023-05-08T09:12:45Z',
+    date: '2025-05-08T09:12:45Z',
     status: 'completed',
   },
   {
@@ -190,7 +190,7 @@ export const mockTransactions: Transaction[] = [
     amount: 5000,
     price: 0.52,
     total: 2600.00,
-    date: '2023-05-05T11:23:15Z',
+    date: '2025-05-05T11:23:15Z',
     status: 'completed',
   },
   {
@@ -200,7 +200,7 @@ export const mockTransactions: Transaction[] = [
     amount: 0.1,
     price: 57123.45,
     total: 5712.35,
-    date: '2023-05-01T16:42:30Z',
+    date: '2025-05-01T16:42:30Z',
     status: 'completed',
   },
   {
@@ -210,7 +210,7 @@ export const mockTransactions: Transaction[] = [
     amount: 2.5,
     price: 3012.78,
     total: 7531.95,
-    date: '2023-04-28T10:15:20Z',
+    date: '2025-04-28T10:15:20Z',
     status: 'completed',
   },
 ];
